@@ -1,0 +1,9 @@
+### Intellij+iml ###
+.idea
+*.iml
+
+# Compiled class file
+out/
+
+### macOS ###
+.DS_Store
