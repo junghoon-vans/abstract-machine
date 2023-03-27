@@ -1,6 +1,8 @@
 package computer.processor;
 
 import computer.Memory;
+import computer.processor.register.IR;
+import computer.processor.register.Register;
 
 /**
  * Central Processing Unit

@@ -2,7 +2,7 @@ package computer;
 
 import java.util.ArrayList;
 import java.util.List;
-import computer.processor.Register;
+import computer.processor.register.Register;
 
 public class Memory {
 

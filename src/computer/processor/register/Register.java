@@ -1,4 +1,4 @@
-package computer.processor;
+package computer.processor.register;
 
 /**
  * Register
@@ -7,7 +7,7 @@ public class Register {
 
   int value;
 
-  Register() {
+  public Register() {
     this.value = 0;
   }
 

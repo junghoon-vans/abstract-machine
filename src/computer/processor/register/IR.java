@@ -1,4 +1,4 @@
-package computer.processor;
+package computer.processor.register;
 
 import instruction.Mode;
 import instruction.Operator;
@@ -6,7 +6,7 @@ import instruction.Operator;
 /**
  * Instruction Register
  */
-class IR extends Register {
+public class IR extends Register {
 
   private Mode mode;
   private Operator operator;
