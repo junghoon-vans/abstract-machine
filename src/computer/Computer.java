@@ -1,14 +1,20 @@
 package computer;
 
 import computer.processor.CPU;
-import java.util.List;
 
 public class Computer {
 
+  private final CPU cpu;
+  private final Memory memory;
+
   public Computer() {
+    cpu = new CPU();
+    memory = new Memory();
+    memory.associate(cpu.mar, cpu.mbr);
+    cpu.associate(memory);
   }
 
   public void run() {
-    System.out.println("Computer is running...");
+    cpu.start();
   }
 }
