@@ -1,0 +1,54 @@
+// count = 10
+move mar @count
+move mbr 10
+sto
+
+// sum = 0
+move mar @sum
+move mbr 0
+sto
+
+// int i = 0
+move mar @i
+move mbr 0
+sto
+
+start:
+  // read i to ac1
+  move mar @i
+  lda
+  move ac1 mbr
+
+  // read count to ac2
+  move mar @count
+  lda
+  move ac2 mbr
+
+  // i - count
+  sub ac1 ac2
+
+  // if i >= count, end
+  gtj end
+
+  // sum = sum + 1
+  move mar @sum
+  lda
+  mov ac1 mbr
+  mov ac2 1
+  add ac1 ac2
+  mov mar @sum
+  mov mbr ac1
+  sto
+
+  // i = i + 1
+  move mar @i
+  lda
+  move ac1 mbr
+  move ac2 1
+  add ac1 ac2
+  move mar @i
+  move mbr ac1
+  sto
+
+  jmp start
+end:    halt
