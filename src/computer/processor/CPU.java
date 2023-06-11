@@ -67,7 +67,6 @@ public class CPU {
 
   private void decode() {
     System.out.println("[decode]");
-    System.out.println("mode: " + ir.isMode());
     System.out.println("operator: " + ir.getOperator());
     System.out.println("operand: " + ir.getOperand());
   }
