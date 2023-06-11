@@ -80,9 +80,6 @@ public class CPU {
       case HALT:
         this.halt();
         break;
-      case ADD:
-        this.add();
-        break;
       default:
         break;
     }
