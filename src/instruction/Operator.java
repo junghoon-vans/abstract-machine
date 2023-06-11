@@ -2,13 +2,18 @@ package instruction;
 
 public enum Operator {
   HALT,
-  LDA,
-  STA,
-  ADD,
-  AND,
-  JMP,
+  LOADA,
+  LOADC,
+  STORE,
+  ADDA,
+  ADDC,
+  SUB,
+  DIV,
+  JUMP,
   BZ,
-  NOT,
+  PUSH,
+  POP,
+  OUT,
   ;
 
   public static Operator valueOf(int value) {
