@@ -9,12 +9,16 @@ public class Computer {
   private final Memory memory;
   private final Loader loader;
 
-  public Computer() {
-    cpu = new CPU();
-    memory = new Memory();
-    memory.associate(cpu.mar, cpu.mbr);
-    cpu.associate(memory);
-    loader = new Loader(memory);
+  /**
+   * Generate a computer with CPU and Memory
+   * @param cpu
+   * @param memory
+   */
+  public Computer(CPU cpu, Memory memory) {
+    this.cpu = cpu;
+    this.memory = memory;
+
+    this.loader = new Loader(memory);
   }
 
   public void run() {

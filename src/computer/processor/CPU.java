@@ -9,19 +9,28 @@ import computer.processor.register.Register;
  */
 public class CPU {
 
+  private final IR ir;
+  private final Register mar;
+  private final Register mbr;
+  private final Register cs;
+  private final Register pc;
+  private final Register ac;
+
   private Memory memory;
   private State state;
-  private IR ir;
-  public Register mar, mbr;
-  public Register cs, pc, ac;
 
-  public CPU() {
-    ir = new IR();
-    mar = new Register();
-    mbr = new Register();
-    cs = new Register();
-    pc = new Register();
-    ac = new Register();
+  /**
+   * Generate a CPU with IR and Registers
+   * @param ir
+   * @param registers
+   */
+  public CPU(IR ir, Register... registers) {
+    this.ir = ir;
+    this.mar = registers[0];
+    this.mbr = registers[1];
+    this.cs = registers[2];
+    this.pc = registers[3];
+    this.ac = registers[4];
   }
 
   public void associate(Memory memory) {
