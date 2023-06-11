@@ -1,9 +1,11 @@
 package kernel;
 
 import computer.Memory;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Loader
@@ -18,15 +20,17 @@ public class Loader {
   }
 
   public void load(String filepath) {
-    try(BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        if (!line.contains("// ")) {
-          System.out.println(line);
-        }
+    List<Integer> instructions = new ArrayList<>();
+    File file = new File(filepath);
+    try {
+      Scanner scanner = new Scanner(file);
+      while (scanner.hasNext()) {
+        String instruction = scanner.next();
+        instructions.add(Integer.parseInt(instruction, 2));
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+      memory.setCodeSegment(instructions);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
     }
   }
 }
