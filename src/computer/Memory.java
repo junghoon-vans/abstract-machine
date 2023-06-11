@@ -15,20 +15,22 @@ public class Memory {
   private Register mar;
   private Register mbr;
 
-  List<Integer> codeSegment;
-  List<Integer> dataSegment;
-  List<Integer> heapSegment;
-  List<Integer> stackSegment;
+  int[] codeSegment;
+  int[] dataSegment;
+  int[] heapSegment;
+  int[] stackSegment;
 
   public Memory() {
-    this.codeSegment = new ArrayList<>();
-    this.dataSegment = new ArrayList<>();
-    this.heapSegment = new ArrayList<>();
-    this.stackSegment = new ArrayList<>();
+    this.codeSegment = new int[1024];
+    this.dataSegment = new int[1024];
+    this.heapSegment = new int[1024];
+    this.stackSegment = new int[1024];
   }
 
   public void setCodeSegment(List<Integer> instructions) {
-    this.codeSegment = instructions;
+    for (int i = 0; i < instructions.size(); i++) {
+      this.codeSegment[i] = instructions.get(i);
+    }
   }
 
   public void associate(Register mar, Register mbr) {
@@ -38,52 +40,29 @@ public class Memory {
 
   public void load() {
     int address = mar.getValue();
-
-    if (address > MAX_MEMORY_ADDRESS || address < CODE_SEGMENT) {
-      throw new RuntimeException("Memory address out of bounds");
+    if (address >= STACK_SEGMENT && address < MAX_MEMORY_ADDRESS) {
+      this.mbr.setValue(this.stackSegment[address - STACK_SEGMENT]);
+    } else if (address >= HEAP_SEGMENT) {
+      this.mbr.setValue(this.heapSegment[address - HEAP_SEGMENT]);
+    } else if (address >= DATA_SEGMENT) {
+      this.mbr.setValue(this.dataSegment[address - DATA_SEGMENT]);
+    } else if (address >= CODE_SEGMENT){
+      this.mbr.setValue(this.codeSegment[address]);
     }
-
-    if (address >= STACK_SEGMENT) {
-      mbr.setValue(this.stackSegment.get(address - STACK_SEGMENT));
-      return;
-    }
-
-    if (address >= HEAP_SEGMENT) {
-      mbr.setValue(this.heapSegment.get(address - HEAP_SEGMENT));
-      return;
-    }
-
-    if (address >= DATA_SEGMENT) {
-      mbr.setValue(this.dataSegment.get(address - DATA_SEGMENT));
-      return;
-    }
-
-    mbr.setValue(this.codeSegment.get(address));
   }
 
   public void store() {
     int address = mar.getValue();
     int value = mbr.getValue();
 
-    if (address > MAX_MEMORY_ADDRESS || address < CODE_SEGMENT) {
-      throw new RuntimeException("Memory address out of bounds");
+    if (address >= STACK_SEGMENT && address < MAX_MEMORY_ADDRESS) {
+      this.stackSegment[address - STACK_SEGMENT] = value;
+    } else if (address >= HEAP_SEGMENT) {
+      this.heapSegment[address - HEAP_SEGMENT] = value;
+    } else if (address >= DATA_SEGMENT) {
+      this.dataSegment[address - DATA_SEGMENT] = value;
+    } else if (address >= CODE_SEGMENT){
+      this.codeSegment[address] = value;
     }
-
-    if (address >= STACK_SEGMENT) {
-      this.stackSegment.set(address - STACK_SEGMENT, value);
-      return;
-    }
-
-    if (address >= HEAP_SEGMENT) {
-      this.heapSegment.set(address - HEAP_SEGMENT, value);
-      return;
-    }
-
-    if (address >= DATA_SEGMENT) {
-      this.dataSegment.set(address - DATA_SEGMENT, value);
-      return;
-    }
-
-    this.codeSegment.set(address, value);
   }
 }
