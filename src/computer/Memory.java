@@ -9,14 +9,14 @@ public class Memory {
   private Register mar;
   private Register mbr;
 
-  List<Integer> memory;
+  List<Integer> codeSegment;
 
   public Memory() {
-    this.memory = new ArrayList<>();
+    this.codeSegment = new ArrayList<>();
   }
 
-  public void setMemory(List<Integer> memory) {
-    this.memory = memory;
+  public void setCodeSegment(List<Integer> instructions) {
+    this.codeSegment = instructions;
   }
 
   public void associate(Register mar, Register mbr) {
@@ -26,12 +26,12 @@ public class Memory {
 
   public void load() {
     int address = mar.getValue();
-    mbr.setValue(this.memory.get(address));
+    mbr.setValue(this.codeSegment.get(address));
   }
 
   public void store() {
     int address = mar.getValue();
     int value = mbr.getValue();
-    this.memory.set(address, value);
+    this.codeSegment.set(address, value);
   }
 }
