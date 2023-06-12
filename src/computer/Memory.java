@@ -40,28 +40,47 @@ public class Memory {
 
   public void load() {
     int address = mar.getValue();
-    int value = 0;
 
     if (address >= STACK_SEGMENT && address < MAX_MEMORY_ADDRESS) {
-      if (stackSegment.size() != 0) {
-        value = this.stackSegment.get((address - STACK_SEGMENT)/4);
-        System.out.println("stack[" + (address - STACK_SEGMENT)/4 + "]: " + value);
+      if (stackSegment.size() == 0) {
+        this.mbr.setValue(0);
+        return;
       }
-    } else if (address >= HEAP_SEGMENT) {
-      value = this.heapSegment[(address - HEAP_SEGMENT)/4];
-      System.out.println("heap[" + (address - HEAP_SEGMENT)/4 + "]: " + value);
-    } else if (address >= DATA_SEGMENT) {
-      value = this.dataSegment[(address - DATA_SEGMENT)/4];
-      System.out.println("data[" + (address - DATA_SEGMENT)/4 + "]: " + value);
-    } else if (address >= CODE_SEGMENT){
-      value = this.codeSegment[address];
+
+      int index = (address - STACK_SEGMENT)/4;
+      int value = this.stackSegment.get(index);
+
+      System.out.println("stack[" + index + "]: " + value);
+      this.mbr.setValue(value);
+      return;
+    }
+
+    if (address >= HEAP_SEGMENT) {
+      int index = (address - HEAP_SEGMENT)/4;
+      int value = this.heapSegment[index];
+
+      System.out.println("heap[" + index + "]: " + value);
+      this.mbr.setValue(value);
+      return;
+    }
+
+    if (address >= DATA_SEGMENT) {
+      int index = (address - DATA_SEGMENT)/4;
+      int value = this.dataSegment[index];
+
+      System.out.println("data[" + index + "]: " + value);
+      this.mbr.setValue(value);
+      return;
+    }
+
+    if (address >= CODE_SEGMENT){
+      int value = this.codeSegment[address];
       System.out.println("code[" + (address) + "]: "
               + String.format("%16s", Integer.toBinaryString(value))
               .replace(' ', '0')
       );
+      this.mbr.setValue(value);
     }
-
-    this.mbr.setValue(value);
   }
 
   public void store() {
@@ -69,12 +88,21 @@ public class Memory {
     int value = mbr.getValue();
 
     if (address >= STACK_SEGMENT && address < MAX_MEMORY_ADDRESS) {
-      this.stackSegment.set((address - STACK_SEGMENT)/4, value);
-    } else if (address >= HEAP_SEGMENT) {
+      this.stackSegment.set((address - STACK_SEGMENT) / 4, value);
+      return;
+    }
+
+    if (address >= HEAP_SEGMENT) {
       this.heapSegment[(address - HEAP_SEGMENT)/4] = value;
-    } else if (address >= DATA_SEGMENT) {
+      return;
+    }
+
+    if (address >= DATA_SEGMENT) {
       this.dataSegment[(address - DATA_SEGMENT)/4] = value;
-    } else if (address >= CODE_SEGMENT){
+      return;
+    }
+
+    if (address >= CODE_SEGMENT){
       this.codeSegment[address] = value;
     }
   }
