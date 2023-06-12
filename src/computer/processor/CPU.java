@@ -4,6 +4,7 @@ import computer.Memory;
 import computer.processor.register.AC;
 import computer.processor.register.IR;
 import computer.processor.register.Register;
+import computer.processor.unit.ALU;
 import java.util.Scanner;
 
 /**
@@ -13,6 +14,8 @@ public class CPU {
 
   private final IR ir;
   private final AC ac;
+
+  private final ALU alu;
 
   private final Register mar;
   private final Register mbr;
@@ -27,9 +30,11 @@ public class CPU {
    * @param ir
    * @param registers
    */
-  public CPU(IR ir, AC ac, Register... registers) {
+  public CPU(IR ir, AC ac, ALU alu, Register... registers) {
     this.ir = ir;
     this.ac = ac;
+    this.alu = alu;
+
     this.mar = registers[0];
     this.mbr = registers[1];
     this.cs = registers[2];
@@ -153,21 +158,21 @@ public class CPU {
   private void adda() {
     mar.setValue(ir.getOperand());
     memory.load();
-    ac.setValue(ac.getValue() + mbr.getValue());
+    alu.add(mbr.getValue());
   }
 
   private void addc() {
-    ac.setValue(ac.getValue() + ir.getOperand());
+    alu.add(ir.getOperand());
   }
 
   private void sub() {
     mar.setValue(ir.getOperand());
     memory.load();
-    ac.setValue(ac.getValue() - mbr.getValue());
+    alu.sub(mbr.getValue());
   }
 
   private void div() {
-    ac.setValue(ac.getValue() / ir.getOperand());
+    alu.div(ir.getOperand());
   }
 
   private void jump() {
