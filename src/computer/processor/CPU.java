@@ -1,6 +1,7 @@
 package computer.processor;
 
 import computer.Memory;
+import computer.processor.register.AC;
 import computer.processor.register.IR;
 import computer.processor.register.Register;
 import java.util.Scanner;
@@ -11,11 +12,12 @@ import java.util.Scanner;
 public class CPU {
 
   private final IR ir;
+  private final AC ac;
+
   private final Register mar;
   private final Register mbr;
   private final Register cs;
   private final Register pc;
-  private final Register ac;
 
   private Memory memory;
   private State state;
@@ -25,13 +27,13 @@ public class CPU {
    * @param ir
    * @param registers
    */
-  public CPU(IR ir, Register... registers) {
+  public CPU(IR ir, AC ac, Register... registers) {
     this.ir = ir;
+    this.ac = ac;
     this.mar = registers[0];
     this.mbr = registers[1];
     this.cs = registers[2];
     this.pc = registers[3];
-    this.ac = registers[4];
   }
 
   public void associate(Memory memory) {
@@ -180,7 +182,7 @@ public class CPU {
   }
 
   private void bz() {
-    if (ac.getValue() == 0) {
+    if (ac.isZero()) {
       pc.setValue(ir.getOperand());
     }
   }
