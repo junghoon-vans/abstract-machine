@@ -104,8 +104,7 @@ public class CU {
 
   private void loada() {
 
-    // Scan @input
-    if (ir.getOperand() == 2047) {
+    if (ir.getOperand() == DMA.KEYBOARD_ADDRESS) {
       int inputValue = DMA.scan("input: ");
       ac.setValue(inputValue);
       return;

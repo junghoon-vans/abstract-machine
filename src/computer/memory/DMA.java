@@ -7,6 +7,8 @@ import java.util.Scanner;
  */
 public class DMA {
 
+  public static final int KEYBOARD_ADDRESS = 2047;
+
   public static final String FONT_GREEN = "\u001B[32m";
   public static final String RESET = "\u001B[0m";
 
