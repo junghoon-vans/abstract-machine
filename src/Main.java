@@ -1,5 +1,5 @@
 import computer.Computer;
-import computer.Memory;
+import computer.memory.Memory;
 import computer.bus.Bus;
 import computer.bus.DataBus;
 import computer.processor.CPU;

@@ -1,4 +1,4 @@
-package computer;
+package computer.memory;
 
 import computer.bus.Bus;
 import java.util.ArrayList;

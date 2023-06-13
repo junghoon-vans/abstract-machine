@@ -1,11 +1,11 @@
 package computer.processor.unit;
 
-import computer.Memory;
+import computer.memory.DMA;
+import computer.memory.Memory;
 import computer.bus.Bus;
 import computer.processor.register.AC;
 import computer.processor.register.IR;
 import computer.processor.register.Register;
-import java.util.Scanner;
 
 public class CU {
 
@@ -106,10 +106,8 @@ public class CU {
 
     // Scan @input
     if (ir.getOperand() == 2047) {
-      System.out.print("input: ");
-      Scanner scanner = new Scanner(System.in);
-      ac.setValue(scanner.nextInt());
-      scanner.close();
+      int inputValue = DMA.scan("input: ");
+      ac.setValue(inputValue);
       return;
     }
 
@@ -174,6 +172,6 @@ public class CU {
   }
 
   private void out() {
-    System.out.printf("output: %d\n", ac.getValue());
+    DMA.print("output: " + ac.getValue());
   }
 }

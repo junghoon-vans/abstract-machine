@@ -1,6 +1,6 @@
 package computer.processor;
 
-import computer.Memory;
+import computer.memory.Memory;
 import computer.bus.Bus;
 import computer.processor.register.AC;
 import computer.processor.register.IR;

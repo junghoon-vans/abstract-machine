@@ -1,5 +1,6 @@
 package computer;
 
+import computer.memory.Memory;
 import computer.processor.CPU;
 import kernel.Loader;
 

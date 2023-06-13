@@ -1,6 +1,6 @@
 package kernel;
 
-import computer.Memory;
+import computer.memory.Memory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
