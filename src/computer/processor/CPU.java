@@ -1,6 +1,7 @@
 package computer.processor;
 
 import computer.Memory;
+import computer.bus.Bus;
 import computer.processor.register.AC;
 import computer.processor.register.IR;
 import computer.processor.register.Register;
@@ -23,28 +24,38 @@ public class CPU {
   private final Register cs;
   private final Register pc;
 
-  private Memory memory;
+  private final Bus dataBus;
+  private final Bus addressBus;
+
   private State state;
 
   /**
    * Generate a CPU with IR and Registers
-   * @param ir
-   * @param registers
+   * @param buses
    */
-  public CPU(IR ir, AC ac, ALU alu, CU cu, Register... registers) {
-    this.ir = ir;
-    this.ac = ac;
-    this.alu = alu;
-    this.cu = cu;
+  public CPU(Bus... buses) {
+    this.ir = new IR();
+    this.ac = new AC();
+    this.mar = new Register();
+    this.mbr = new Register();
+    this.cs = new Register();
+    this.pc = new Register();
 
-    this.mar = registers[0];
-    this.mbr = registers[1];
-    this.cs = registers[2];
-    this.pc = registers[3];
+    this.alu = new ALU(ac);
+    this.dataBus = buses[0];
+    this.addressBus = buses[1];
+
+    this.dataBus.connect(this.mbr);
+    this.addressBus.connect(this.mar);
+
+    this.cu = new CU(ir, ac, alu, dataBus, addressBus, cs, pc);
   }
 
+  /**
+   * Associate a memory to the CPU
+   * @param memory
+   */
   public void associate(Memory memory) {
-    this.memory = memory;
     this.cu.associate(memory);
   }
 

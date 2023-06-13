@@ -1,6 +1,7 @@
 package computer.processor.unit;
 
 import computer.Memory;
+import computer.bus.Bus;
 import computer.processor.register.AC;
 import computer.processor.register.IR;
 import computer.processor.register.Register;
@@ -13,21 +14,22 @@ public class CU {
   private AC ac;
   private ALU alu;
 
-  private Register mar;
-  private Register mbr;
+  private Bus dataBus;
+  private Bus addressBus;
   private Register cs;
   private Register pc;
 
 
-  public CU(IR ir, AC ac, ALU alu, Register... registers) {
+  public CU(IR ir, AC ac, ALU alu, Bus dataBus, Bus addressBus, Register... registers) {
     this.ir = ir;
     this.ac = ac;
     this.alu = alu;
 
-    this.mar = registers[0];
-    this.mbr = registers[1];
-    this.cs = registers[2];
-    this.pc = registers[3];
+    this.dataBus = dataBus;
+    this.addressBus = addressBus;
+
+    this.cs = registers[0];
+    this.pc = registers[1];
   }
 
   public void associate(Memory memory) {
@@ -36,9 +38,9 @@ public class CU {
 
   public void fetch() {
     System.out.println("[fetch]");
-    mar.setValue(cs.getValue() + pc.getValue());
+    addressBus.write(cs.getValue() + pc.getValue());
     memory.load();
-    ir.setValue(mbr.getValue());
+    ir.setValue(dataBus.read());
   }
 
   public void decode() {
@@ -111,9 +113,9 @@ public class CU {
       return;
     }
 
-    mar.setValue(ir.getOperand());
+    addressBus.write(ir.getOperand());
     memory.load();
-    ac.setValue(mbr.getValue());
+    ac.setValue(dataBus.read());
   }
 
   private void loadc() {
@@ -121,15 +123,15 @@ public class CU {
   }
 
   private void store() {
-    mar.setValue(ir.getOperand());
-    mbr.setValue(ac.getValue());
+    addressBus.write(ir.getOperand());
+    dataBus.write(ac.getValue());
     memory.store();
   }
 
   private void adda() {
-    mar.setValue(ir.getOperand());
+    addressBus.write(ir.getOperand());
     memory.load();
-    alu.add(mbr.getValue());
+    alu.add(dataBus.read());
   }
 
   private void addc() {
@@ -137,9 +139,9 @@ public class CU {
   }
 
   private void sub() {
-    mar.setValue(ir.getOperand());
+    addressBus.write(ir.getOperand());
     memory.load();
-    alu.sub(mbr.getValue());
+    alu.sub(dataBus.read());
   }
 
   private void div() {
@@ -152,9 +154,9 @@ public class CU {
       return;
     }
 
-    mar.setValue(ir.getOperand());
+    addressBus.write(ir.getOperand());
     memory.load();
-    pc.setValue(mbr.getValue());
+    pc.setValue(dataBus.read());
   }
 
   private void bz() {

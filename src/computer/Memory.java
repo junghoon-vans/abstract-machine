@@ -1,5 +1,6 @@
 package computer;
 
+import computer.bus.Bus;
 import java.util.ArrayList;
 import java.util.List;
 import computer.processor.register.Register;
@@ -12,19 +13,22 @@ public class Memory {
   private static final int STACK_SEGMENT = 3072;
   private static final int MAX_MEMORY_ADDRESS = 4096;
 
-  private Register mar;
-  private Register mbr;
+  private final Bus dataBus;
+  private final Bus addressBus;
 
   private int[] codeSegment;
   private int[] dataSegment;
   private int[] heapSegment;
   private List<Integer> stackSegment;
 
-  public Memory() {
+  public Memory(Bus... buses) {
     this.codeSegment = new int[1024];
     this.dataSegment = new int[1024];
     this.heapSegment = new int[1024];
     this.stackSegment = new ArrayList<>();
+
+    this.dataBus = buses[0];
+    this.addressBus = buses[1];
   }
 
   public void setCodeSegment(List<Integer> instructions) {
@@ -33,17 +37,12 @@ public class Memory {
     }
   }
 
-  public void associate(Register mar, Register mbr) {
-    this.mar = mar;
-    this.mbr = mbr;
-  }
-
   public void load() {
-    int address = mar.getValue();
+    int address = addressBus.read();
 
     if (address >= STACK_SEGMENT && address < MAX_MEMORY_ADDRESS) {
       if (stackSegment.size() == 0) {
-        this.mbr.setValue(0);
+        this.dataBus.write(0);
         return;
       }
 
@@ -51,7 +50,7 @@ public class Memory {
       int value = this.stackSegment.get(index);
 
       System.out.println("stack[" + index + "]: " + value);
-      this.mbr.setValue(value);
+      this.dataBus.write(value);
       return;
     }
 
@@ -60,7 +59,7 @@ public class Memory {
       int value = this.heapSegment[index];
 
       System.out.println("heap[" + index + "]: " + value);
-      this.mbr.setValue(value);
+      this.dataBus.write(value);
       return;
     }
 
@@ -69,7 +68,7 @@ public class Memory {
       int value = this.dataSegment[index];
 
       System.out.println("data[" + index + "]: " + value);
-      this.mbr.setValue(value);
+      this.dataBus.write(value);
       return;
     }
 
@@ -79,13 +78,13 @@ public class Memory {
               + String.format("%16s", Integer.toBinaryString(value))
               .replace(' ', '0')
       );
-      this.mbr.setValue(value);
+      this.dataBus.write(value);
     }
   }
 
   public void store() {
-    int address = mar.getValue();
-    int value = mbr.getValue();
+    int address = addressBus.read();
+    int value = dataBus.read();
 
     if (address >= STACK_SEGMENT && address < MAX_MEMORY_ADDRESS) {
       this.stackSegment.set((address - STACK_SEGMENT) / 4, value);
